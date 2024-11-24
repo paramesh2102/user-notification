@@ -1,0 +1,23 @@
+import { Controller, Post, Get, Body, Param } from '@nestjs/common';
+import { NotificationService } from './notification.service';
+import { NotificationLog } from './notification-log.model';
+
+@Controller('api/notifications')
+export class NotificationsController {
+  constructor(private readonly notificationService: NotificationService) {}
+
+  @Post('send')
+  async sendNotification(@Body() notificationLog: NotificationLog) {
+    return this.notificationService.create(notificationLog);
+  }
+
+  @Get(':userId/logs')
+  async getUserLogs(@Param('userId') userId: string) {
+    return this.notificationService.findLogsByUserId(userId);
+  }
+
+  @Get('stats')
+  async getStats() {
+    return this.notificationService.getNotificationStats();
+  }
+}
